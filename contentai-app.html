@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContentAI — Écris moins, impacte plus</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noir: #0a0a0a;
+    --blanc: #f5f2ec;
+    --creme: #ede8df;
+    --accent: #c8a96e;
+    --accent2: #e8d5b0;
+    --gris: #6b6560;
+    --card: #ffffff;
+    --border: #e2ddd6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--blanc);
+    color: var(--noir);
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--blanc);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+  }
+
+  .logo span { color: var(--accent); }
+
+  nav .nav-links { display: flex; gap: 2rem; align-items: center; }
+  nav a { text-decoration: none; color: var(--gris); font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+  nav a:hover { color: var(--noir); }
+
+  .btn-nav {
+    background: var(--noir);
+    color: var(--blanc) !important;
+    padding: 0.6rem 1.4rem;
+    border-radius: 4px;
+    font-weight: 500 !important;
+    transition: background 0.2s !important;
+  }
+  .btn-nav:hover { background: #333 !important; }
+
+  /* HERO */
+  .hero {
+    padding: 6rem 3rem 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    min-height: 80vh;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: var(--accent2);
+    color: #7a5c2a;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.3rem 0.9rem;
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero p {
+    color: var(--gris);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    font-weight: 300;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--noir);
+    color: var(--blanc);
+    padding: 0.85rem 2rem;
+    border: none;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: #222; transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--noir);
+    padding: 0.85rem 1.5rem;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--noir); }
+
+  .hero-trust {
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    color: var(--gris);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* DEMO CARD */
+  .demo-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.06);
+    animation: floatCard 4s ease-in-out infinite;
+  }
+
+  @keyframes floatCard {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .demo-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .demo-avatar {
+    width: 36px; height: 36px;
+    background: var(--accent2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #7a5c2a;
+  }
+
+  .demo-name { font-size: 0.85rem; font-weight: 500; }
+  .demo-role { font-size: 0.75rem; color: var(--gris); }
+
+  .demo-tag {
+    margin-left: auto;
+    background: #e8f5e9;
+    color: #2e7d32;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+
+  .demo-text {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: #333;
+    margin-bottom: 1.2rem;
+  }
+
+  .demo-stats {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .demo-stat { font-size: 0.78rem; color: var(--gris); display: flex; align-items: center; gap: 0.3rem; }
+
+  /* APP SECTION */
+  .app-section {
+    background: var(--noir);
+    color: var(--blanc);
+    padding: 5rem 3rem;
+  }
+
+  .app-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 3rem;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 2rem;
+    border: 1px solid #333;
+    border-radius: 6px;
+    overflow: hidden;
+    width: fit-content;
+  }
+
+  .tab {
+    padding: 0.65rem 1.5rem;
+    background: transparent;
+    color: #888;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+
+  .tab.active {
+    background: var(--accent);
+    color: var(--noir);
+  }
+
+  .generator-form {
+    display: grid;
+    gap: 1.2rem;
+  }
+
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-group label { font-size: 0.82rem; color: #aaa; font-weight: 500; letter-spacing: 0.02em; }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 6px;
+    color: var(--blanc);
+    padding: 0.75rem 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--accent);
+  }
+
+  .form-group select option { background: #1a1a1a; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .btn-generate {
+    background: var(--accent);
+    color: var(--noir);
+    padding: 0.9rem 2rem;
+    border: none;
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .btn-generate:hover { background: var(--accent2); transform: translateY(-1px); }
+  .btn-generate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .result-box {
+    margin-top: 2rem;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1.5rem;
+    min-height: 120px;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: #ddd;
+    white-space: pre-wrap;
+    display: none;
+  }
+
+  .result-box.visible { display: block; animation: fadeIn 0.4s ease; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .result-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .btn-copy {
+    background: #2a2a2a;
+    color: #ccc;
+    border: 1px solid #333;
+    padding: 0.5rem 1.2rem;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-copy:hover { border-color: var(--accent); color: var(--accent); }
+
+  .loading-dots span {
+    animation: blink 1.2s infinite;
+    font-size: 1.2rem;
+  }
+  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes blink { 0%,100%{opacity:0.2} 50%{opacity:1} }
+
+  /* PRICING */
+  .pricing-section {
+    padding: 6rem 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    text-align: left;
+  }
+
+  .pricing-card {
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: all 0.2s;
+  }
+
+  .pricing-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+
+  .pricing-card.featured {
+    background: var(--noir);
+    color: var(--blanc);
+    border-color: var(--noir);
+  }
+
+  .plan-name { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; color: var(--gris); margin-bottom: 0.5rem; }
+  .pricing-card.featured .plan-name { color: var(--accent); }
+
+  .plan-price { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; margin-bottom: 0.25rem; }
+  .plan-price span { font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 300; color: var(--gris); }
+  .pricing-card.featured .plan-price span { color: #888; }
+
+  .plan-desc { font-size: 0.85rem; color: var(--gris); margin-bottom: 1.5rem; line-height: 1.5; }
+  .pricing-card.featured .plan-desc { color: #aaa; }
+
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.5rem; }
+  .plan-features li { font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; }
+  .plan-features li::before { content: '✓'; color: var(--accent); font-weight: 700; }
+
+  .btn-plan {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1.5px solid var(--noir);
+    background: transparent;
+    color: var(--noir);
+  }
+
+  .btn-plan:hover { background: var(--noir); color: var(--blanc); }
+  .pricing-card.featured .btn-plan { background: var(--accent); border-color: var(--accent); color: var(--noir); }
+  .pricing-card.featured .btn-plan:hover { background: var(--accent2); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--gris);
+    font-size: 0.8rem;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.open { display: flex; animation: fadeIn 0.3s ease; }
+
+  .modal {
+    background: var(--blanc);
+    border-radius: 12px;
+    padding: 2.5rem;
+    max-width: 440px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  }
+
+  .modal h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .modal p { color: var(--gris); font-size: 0.88rem; margin-bottom: 1.5rem; }
+
+  .modal-form { display: flex; flex-direction: column; gap: 0.9rem; }
+
+  .modal-form input {
+    background: var(--creme);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .modal-form input:focus { border-color: var(--accent); }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    background: none; border: none;
+    font-size: 1.5rem; cursor: pointer;
+    color: var(--gris);
+  }
+
+  .modal { position: relative; }
+
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem; min-height: auto; }
+    .demo-card { display: none; }
+    nav { padding: 1rem 1.5rem; }
+    .nav-links a:not(.btn-nav) { display: none; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .app-section { padding: 3rem 1.5rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Content<span>AI</span></div>
+  <div class="nav-links">
+    <a href="#app">Essayer</a>
+    <a href="#pricing">Tarifs</a>
+    <a href="#" class="btn-nav" onclick="openModal()">Commencer</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">✦ Propulsé par l'intelligence artificielle</div>
+    <h1>Écris <em>moins</em>,<br>impacte <em>plus</em>.</h1>
+    <p>Génère des posts LinkedIn percutants et des emails marketing qui convertissent — en quelques secondes, sans effort.</p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="document.getElementById('app').scrollIntoView({behavior:'smooth'})">Essayer gratuitement</button>
+      <button class="btn-secondary" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Voir les tarifs</button>
+    </div>
+    <div class="hero-trust">
+      <span>🔒</span> Aucune carte bancaire requise · Résultats en 10 secondes
+    </div>
+  </div>
+
+  <div class="demo-card">
+    <div class="demo-header">
+      <div class="demo-avatar">ML</div>
+      <div>
+        <div class="demo-name">Marie Laurent</div>
+        <div class="demo-role">Consultante RH · Paris</div>
+      </div>
+      <div class="demo-tag">✓ Généré par ContentAI</div>
+    </div>
+    <div class="demo-text">
+      J'ai passé 3 ans à croire que recruter les bons profils était une question de feeling.<br><br>
+      J'avais tort.<br><br>
+      Ce qui fait vraiment la différence, c'est la structure derrière l'entretien. Voici les 5 questions que j'utilise maintenant systématiquement 👇
+    </div>
+    <div class="demo-stats">
+      <div class="demo-stat">👍 847 réactions</div>
+      <div class="demo-stat">💬 123 commentaires</div>
+      <div class="demo-stat">🔄 201 partages</div>
+    </div>
+  </div>
+</section>
+
+<!-- APP -->
+<section class="app-section" id="app">
+  <div class="app-container">
+    <div class="section-label">✦ Générateur</div>
+    <div class="section-title">Crée ton contenu<br>en quelques secondes</div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('linkedin', this)">LinkedIn</button>
+      <button class="tab" onclick="switchTab('email', this)">Email Marketing</button>
+    </div>
+
+    <!-- LINKEDIN FORM -->
+    <div id="form-linkedin" class="generator-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ton métier / domaine</label>
+          <input type="text" id="li-metier" placeholder="ex: Consultant en marketing">
+        </div>
+        <div class="form-group">
+          <label>Ton audience cible</label>
+          <input type="text" id="li-audience" placeholder="ex: Dirigeants de PME">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Sujet ou message principal</label>
+        <textarea id="li-sujet" rows="3" placeholder="ex: Comment j'ai doublé mes clients en 6 mois grâce à une seule stratégie..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ton de la publication</label>
+          <select id="li-ton">
+            <option value="inspirant">Inspirant & motivant</option>
+            <option value="éducatif">Éducatif & pratique</option>
+            <option value="storytelling">Storytelling personnel</option>
+            <option value="direct">Direct & percutant</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Longueur</label>
+          <select id="li-longueur">
+            <option value="courte">Courte (150-200 mots)</option>
+            <option value="moyenne" selected>Moyenne (250-350 mots)</option>
+            <option value="longue">Longue (400-500 mots)</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generateContent('linkedin')" id="btn-linkedin">
+        <span>✦</span> Générer mon post LinkedIn
+      </button>
+    </div>
+
+    <!-- EMAIL FORM -->
+    <div id="form-email" class="generator-form" style="display:none">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nom de ton entreprise / marque</label>
+          <input type="text" id="em-marque" placeholder="ex: Studio Créatif Paris">
+        </div>
+        <div class="form-group">
+          <label>Objectif de l'email</label>
+          <select id="em-objectif">
+            <option value="vente">Vendre un produit / service</option>
+            <option value="promo">Annoncer une promotion</option>
+            <option value="newsletter">Newsletter / contenu</option>
+            <option value="relance">Relancer des clients inactifs</option>
+            <option value="bienvenue">Email de bienvenue</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Décris ton offre ou le contenu de l'email</label>
+        <textarea id="em-offre" rows="3" placeholder="ex: Formation en ligne sur la photo pour débutants, prix 97€, places limitées..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ton de communication</label>
+          <select id="em-ton">
+            <option value="professionnel">Professionnel & sérieux</option>
+            <option value="chaleureux">Chaleureux & humain</option>
+            <option value="urgent">Urgence & exclusivité</option>
+            <option value="storytelling">Storytelling</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Audience</label>
+          <input type="text" id="em-audience" placeholder="ex: Entrepreneurs, freelances...">
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generateContent('email')" id="btn-email">
+        <span>✦</span> Générer mon email marketing
+      </button>
+    </div>
+
+    <!-- RESULT -->
+    <div class="result-box" id="result-box"></div>
+    <div class="result-actions" id="result-actions" style="display:none">
+      <button class="btn-copy" onclick="copyResult()">📋 Copier</button>
+      <button class="btn-copy" onclick="generateAgain()">🔄 Régénérer</button>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="section-label">✦ Tarifs</div>
+  <div class="section-title" style="font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,2.8rem); font-weight:900;">
+    Simple. Transparent. Rentable.
+  </div>
+
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="plan-name">Gratuit</div>
+      <div class="plan-price">0€ <span>/mois</span></div>
+      <div class="plan-desc">Pour découvrir et tester ContentAI.</div>
+      <ul class="plan-features">
+        <li>5 générations / mois</li>
+        <li>Posts LinkedIn</li>
+        <li>Emails marketing</li>
+        <li>Copier-coller facile</li>
+      </ul>
+      <button class="btn-plan" onclick="openModal()">Commencer gratuitement</button>
+    </div>
+
+    <div class="pricing-card featured">
+      <div class="plan-name">Pro</div>
+      <div class="plan-price">19€ <span>/mois</span></div>
+      <div class="plan-desc">Pour les créateurs et freelances actifs.</div>
+      <ul class="plan-features">
+        <li>100 générations / mois</li>
+        <li>Posts LinkedIn & Emails</li>
+        <li>Tous les tons disponibles</li>
+        <li>Historique des créations</li>
+        <li>Support prioritaire</li>
+      </ul>
+      <button class="btn-plan" onclick="openModal()">Choisir Pro</button>
+    </div>
+
+    <div class="pricing-card">
+      <div class="plan-name">Agence</div>
+      <div class="plan-price">49€ <span>/mois</span></div>
+      <div class="plan-desc">Pour les équipes et agences marketing.</div>
+      <ul class="plan-features">
+        <li>Générations illimitées</li>
+        <li>Jusqu'à 5 utilisateurs</li>
+        <li>Tous les formats</li>
+        <li>Export PDF & Word</li>
+        <li>Onboarding personnalisé</li>
+      </ul>
+      <button class="btn-plan" onclick="openModal()">Choisir Agence</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo" style="font-size:1.1rem">Content<span style="color:var(--accent)">AI</span></div>
+  <div>© 2025 ContentAI · Fait avec IA en France 🇫🇷</div>
+  <div style="display:flex;gap:1.5rem">
+    <a href="#" style="color:var(--gris);text-decoration:none">Mentions légales</a>
+    <a href="#" style="color:var(--gris);text-decoration:none">CGU</a>
+    <a href="#" style="color:var(--gris);text-decoration:none">Contact</a>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h2>Créer un compte</h2>
+    <p>Commence gratuitement, sans carte bancaire requise.</p>
+    <div class="modal-form">
+      <input type="text" placeholder="Ton prénom">
+      <input type="email" placeholder="Ton email professionnel">
+      <input type="password" placeholder="Crée un mot de passe">
+      <button class="btn-primary" style="text-align:center">Créer mon compte gratuit →</button>
+    </div>
+    <p style="margin-top:1rem;font-size:0.75rem;text-align:center">En t'inscrivant, tu acceptes nos CGU. Aucun spam.</p>
+  </div>
+</div>
+
+<script>
+  let currentTab = 'linkedin';
+  let lastAction = null;
+
+  function switchTab(tab, el) {
+    currentTab = tab;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('form-linkedin').style.display = tab === 'linkedin' ? 'grid' : 'none';
+    document.getElementById('form-email').style.display = tab === 'email' ? 'grid' : 'none';
+    document.getElementById('result-box').classList.remove('visible');
+    document.getElementById('result-actions').style.display = 'none';
+  }
+
+  async function generateContent(type) {
+    const btn = document.getElementById('btn-' + type);
+    const resultBox = document.getElementById('result-box');
+    const resultActions = document.getElementById('result-actions');
+
+    let prompt = '';
+
+    if (type === 'linkedin') {
+      const metier = document.getElementById('li-metier').value || 'professionnel';
+      const audience = document.getElementById('li-audience').value || 'mon réseau';
+      const sujet = document.getElementById('li-sujet').value || 'partager une expérience professionnelle';
+      const ton = document.getElementById('li-ton').value;
+      const longueur = document.getElementById('li-longueur').value;
+
+      prompt = `Tu es un expert en personal branding et copywriting LinkedIn.
+
+Crée un post LinkedIn ${longueur} avec un ton ${ton} pour un(e) ${metier} qui s'adresse à ${audience}.
+
+Sujet / message principal : ${sujet}
+
+Le post doit :
+- Commencer par une accroche forte qui donne envie de lire la suite (pas de "Je" en premier mot)
+- Avoir une structure aérée avec des retours à la ligne
+- Inclure des emojis pertinents (avec modération)
+- Terminer par un call-to-action ou une question engageante
+- Être naturel, humain et authentique
+
+Réponds UNIQUEMENT avec le texte du post, sans titre ni explication.`;
+    } else {
+      const marque = document.getElementById('em-marque').value || 'notre entreprise';
+      const objectif = document.getElementById('em-objectif').value;
+      const offre = document.getElementById('em-offre').value || 'notre offre';
+      const ton = document.getElementById('em-ton').value;
+      const audience = document.getElementById('em-audience').value || 'nos clients';
+
+      prompt = `Tu es un expert en email marketing et copywriting.
+
+Crée un email marketing complet avec un ton ${ton} pour la marque "${marque}" ciblant ${audience}.
+
+Objectif de l'email : ${objectif}
+Description de l'offre / contenu : ${offre}
+
+L'email doit inclure :
+- Un objet accrocheur (indiqué en début avec "Objet : ")
+- Un en-tête chaleureux
+- Un corps de texte structuré et persuasif
+- Un call-to-action clair et visible (en majuscules ou entre crochets)
+- Une signature professionnelle
+
+Réponds UNIQUEMENT avec l'email complet, sans explication.`;
+    }
+
+    lastAction = { type, prompt };
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span> Génération en cours';
+
+    resultBox.classList.remove('visible');
+    resultActions.style.display = 'none';
+
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          messages: [{ role: "user", content: prompt }]
+        })
+      });
+
+      const data = await response.json();
+      const text = data.content?.[0]?.text || "Une erreur est survenue. Veuillez réessayer.";
+
+      resultBox.textContent = text;
+      resultBox.classList.add('visible');
+      resultActions.style.display = 'flex';
+      resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    } catch (err) {
+      resultBox.textContent = "Erreur de connexion. Vérifiez votre connexion internet et réessayez.";
+      resultBox.classList.add('visible');
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = type === 'linkedin'
+      ? '<span>✦</span> Générer mon post LinkedIn'
+      : '<span>✦</span> Générer mon email marketing';
+  }
+
+  function generateAgain() {
+    if (lastAction) generateContent(lastAction.type);
+  }
+
+  function copyResult() {
+    const text = document.getElementById('result-box').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = event.target;
+      btn.textContent = '✓ Copié !';
+      setTimeout(() => btn.textContent = '📋 Copier', 2000);
+    });
+  }
+
+  function openModal() {
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+  }
+</script>
+</body>
+</html>
