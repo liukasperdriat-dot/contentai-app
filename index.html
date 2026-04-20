@@ -657,6 +657,18 @@
       </button>
     </div>
 
+    <!-- API KEY -->
+    <div id="api-key-section" style="margin-bottom:1.5rem; display:none;">
+      <div class="form-group">
+        <label>🔑 Clé API Anthropic</label>
+        <div style="display:flex; gap:0.75rem;">
+          <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." style="flex:1; background:#1a1a1a; border:1px solid #c8a96e; border-radius:6px; color:#f5f2ec; padding:0.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:0.9rem; outline:none;">
+          <button onclick="saveApiKey()" style="background:#c8a96e; color:#0a0a0a; border:none; border-radius:6px; padding:0.75rem 1.2rem; font-family:'DM Sans',sans-serif; font-weight:600; cursor:pointer;">Sauvegarder</button>
+        </div>
+        <span style="font-size:0.75rem; color:#888; margin-top:0.3rem;">Obtiens ta clé sur platform.anthropic.com · Elle sera sauvegardée dans ton navigateur</span>
+      </div>
+    </div>
+
     <!-- RESULT -->
     <div class="result-box" id="result-box"></div>
     <div class="result-actions" id="result-actions" style="display:none">
@@ -748,6 +760,17 @@
   let currentTab = 'linkedin';
   let lastAction = null;
 
+  function saveApiKey() {
+    const key = document.getElementById('api-key-input').value.trim();
+    if (!key.startsWith('sk-ant-')) {
+      alert('La clé doit commencer par sk-ant-');
+      return;
+    }
+    localStorage.setItem('contentai_key', key);
+    document.getElementById('api-key-section').style.display = 'none';
+    document.getElementById('result-box').textContent = '✓ Clé sauvegardée ! Clique à nouveau sur Générer.';
+  }
+
   function switchTab(tab, el) {
     currentTab = tab;
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -815,9 +838,13 @@ Réponds UNIQUEMENT avec l'email complet, sans explication.`;
     // Récupérer la clé API
     let apiKey = localStorage.getItem('contentai_key');
     if (!apiKey) {
-      apiKey = window.prompt("Entre ta clé API Anthropic (sk-ant-...) pour activer le générateur :");
-      if (!apiKey) return;
-      localStorage.setItem('contentai_key', apiKey);
+      document.getElementById('api-key-section').style.display = 'block';
+      document.getElementById('api-key-input').focus();
+      resultBox.textContent = "Entre ta clé API ci-dessus pour activer le générateur.";
+      resultBox.classList.add('visible');
+      btn.disabled = false;
+      btn.innerHTML = type === 'linkedin' ? '<span>✦</span> Générer mon post LinkedIn' : '<span>✦</span> Générer mon email marketing';
+      return;
     }
 
     btn.disabled = true;
