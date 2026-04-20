@@ -815,7 +815,7 @@ Réponds UNIQUEMENT avec l'email complet, sans explication.`;
     // Récupérer la clé API
     let apiKey = localStorage.getItem('contentai_key');
     if (!apiKey) {
-      apiKey = prompt("Entre ta clé API Anthropic (sk-ant-...) pour activer le générateur :");
+      apiKey = window.prompt("Entre ta clé API Anthropic (sk-ant-...) pour activer le générateur :");
       if (!apiKey) return;
       localStorage.setItem('contentai_key', apiKey);
     }
