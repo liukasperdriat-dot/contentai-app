@@ -896,29 +896,16 @@ const response = await fetch("/api/generate", {
       });
 
       const data = await response.json();
-if (data.error) {
+if (data.error || data.code) {
   if (data.code === 'GUEST_LIMIT_REACHED') {
     resultBox.textContent = '🔒 Créez un compte gratuit pour continuer à générer.';
     resultBox.classList.add('visible');
     setTimeout(() => openModal(), 1500);
-    return;
+  } else {
+    resultBox.textContent = "Erreur : " + (data.error.message || JSON.stringify(data.error));
+    resultBox.classList.add('visible');
   }
-  resultBox.textContent = "Erreur : " + (data.error.message || JSON.stringify(data.error));
-  resultBox.classList.add('visible');
-}
-    setTimeout(() => openModal(), 1500);
-    return;
-  }
-  resultBox.textContent = "Erreur : " + (data.error.message || JSON.stringify(data.error));
-  resultBox.classList.add('visible');
-}
-      } else {
-        if (data.code === 'GUEST_LIMIT_REACHED') {
-  resultBox.textContent = '🔒 Créez un compte gratuit pour continuer à générer.';
-  resultBox.classList.add('visible');
-  setTimeout(() => openModal(), 1500);
-  return;
-}
+} else {
 
 const text = data.content?.[0]?.text || "Une erreur est survenue.";
 resultBox.textContent = text;
