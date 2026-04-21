@@ -883,11 +883,11 @@ Réponds UNIQUEMENT avec l'email complet, sans explication.`;
     const token = localStorage.getItem('contentai_token');
 const response = await fetch("/api/generate", {
   method: "POST",
-  headers: { 
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${token}`
-    "x-guest-count": localStorage.getItem('guest_count') || '0'
-  },
+ headers: {
+  "Content-Type": "application/json",
+  "Authorization": `Bearer ${token}`,
+  "x-guest-count": localStorage.getItem('guest_count') || '0'
+},
   body: JSON.stringify({
           model: "claude-haiku-4-5-20251001",
           max_tokens: 1000,
