@@ -886,6 +886,7 @@ const response = await fetch("/api/generate", {
   headers: { 
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`
+    "x-guest-count": localStorage.getItem('guest_count') || '0'
   },
   body: JSON.stringify({
           model: "claude-haiku-4-5-20251001",
@@ -899,10 +900,21 @@ const response = await fetch("/api/generate", {
         resultBox.textContent = "Erreur : " + (data.error.message || JSON.stringify(data.error));
         resultBox.classList.add('visible');
       } else {
-        const text = data.content?.[0]?.text || "Une erreur est survenue.";
-        resultBox.textContent = text;
-        resultBox.classList.add('visible');
-        resultActions.style.display = 'flex';
+        if (data.code === 'GUEST_LIMIT_REACHED') {
+  resultBox.textContent = '🔒 Créez un compte gratuit pour continuer à générer.';
+  resultBox.classList.add('visible');
+  setTimeout(() => openModal(), 1500);
+  return;
+}
+
+const text = data.content?.[0]?.text || "Une erreur est survenue.";
+resultBox.textContent = text;
+resultBox.classList.add('visible');
+resultActions.style.display = 'flex';
+
+if (!localStorage.getItem('contentai_token')) {
+  localStorage.setItem('guest_count', '1');
+}
         resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
 
