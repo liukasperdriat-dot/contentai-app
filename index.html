@@ -835,18 +835,6 @@ Réponds UNIQUEMENT avec l'email complet, sans explication.`;
 
     lastAction = { type, prompt };
 
-    // Récupérer la clé API
-    let apiKey = localStorage.getItem('contentai_key');
-    if (!apiKey) {
-      document.getElementById('api-key-section').style.display = 'block';
-      document.getElementById('api-key-input').focus();
-      resultBox.textContent = "Entre ta clé API ci-dessus pour activer le générateur.";
-      resultBox.classList.add('visible');
-      btn.disabled = false;
-      btn.innerHTML = type === 'linkedin' ? '<span>✦</span> Générer mon post LinkedIn' : '<span>✦</span> Générer mon email marketing';
-      return;
-    }
-
     btn.disabled = true;
     btn.innerHTML = '<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span> Génération en cours';
 
@@ -854,14 +842,9 @@ Réponds UNIQUEMENT avec l'email complet, sans explication.`;
     resultActions.style.display = 'none';
 
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/generate", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": apiKey,
-          "anthropic-version": "2023-06-01",
-          "anthropic-dangerous-direct-browser-access": "true"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "claude-sonnet-4-20250514",
           max_tokens: 1000,
@@ -871,11 +854,10 @@ Réponds UNIQUEMENT avec l'email complet, sans explication.`;
 
       const data = await response.json();
       if (data.error) {
-        localStorage.removeItem('contentai_key');
-        resultBox.textContent = "Clé API invalide. Recharge la page et réessaie.";
+        resultBox.textContent = "Erreur : " + (data.error.message || JSON.stringify(data.error));
         resultBox.classList.add('visible');
       } else {
-        const text = data.content?.[0]?.text || "Une erreur est survenue. Veuillez réessayer.";
+        const text = data.content?.[0]?.text || "Une erreur est survenue.";
         resultBox.textContent = text;
         resultBox.classList.add('visible');
         resultActions.style.display = 'flex';
