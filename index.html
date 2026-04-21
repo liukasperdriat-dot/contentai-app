@@ -740,19 +740,57 @@
   </div>
 </footer>
 
-<!-- MODAL -->
+<!-- MODAL AUTH -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">×</button>
-    <h2>Créer un compte</h2>
-    <p>Commence gratuitement, sans carte bancaire requise.</p>
-    <div class="modal-form">
-      <input type="text" placeholder="Ton prénom">
-      <input type="email" placeholder="Ton email professionnel">
-      <input type="password" placeholder="Crée un mot de passe">
-      <button class="btn-primary" style="text-align:center">Créer mon compte gratuit →</button>
+
+    <!-- Vue: Inscription -->
+    <div id="view-register">
+      <h2>Créer un compte</h2>
+      <p>Commence gratuitement, sans carte bancaire.</p>
+      <div class="modal-form">
+        <input type="email" id="reg-email" placeholder="Ton email professionnel">
+        <input type="password" id="reg-password" placeholder="Crée un mot de passe (min 6 caractères)">
+        <div id="reg-error" style="color:#c0392b;font-size:0.82rem;display:none;"></div>
+        <button class="btn-primary" style="text-align:center" onclick="handleRegister()">
+          Créer mon compte gratuit →
+        </button>
+      </div>
+      <p style="margin-top:1rem;font-size:0.8rem;text-align:center">
+        Déjà un compte ? <a href="#" onclick="showView('login')" style="color:var(--accent)">Se connecter</a>
+      </p>
     </div>
-    <p style="margin-top:1rem;font-size:0.75rem;text-align:center">En t'inscrivant, tu acceptes nos CGU. Aucun spam.</p>
+
+    <!-- Vue: Connexion -->
+    <div id="view-login" style="display:none">
+      <h2>Bon retour !</h2>
+      <p>Connecte-toi pour accéder à ton espace.</p>
+      <div class="modal-form">
+        <input type="email" id="login-email" placeholder="Ton email">
+        <input type="password" id="login-password" placeholder="Ton mot de passe">
+        <div id="login-error" style="color:#c0392b;font-size:0.82rem;display:none;"></div>
+        <button class="btn-primary" style="text-align:center" onclick="handleLogin()">
+          Se connecter →
+        </button>
+      </div>
+      <p style="margin-top:1rem;font-size:0.8rem;text-align:center">
+        Pas encore de compte ? <a href="#" onclick="showView('register')" style="color:var(--accent)">S'inscrire</a>
+      </p>
+    </div>
+
+    <!-- Vue: Connecté -->
+    <div id="view-loggedin" style="display:none">
+      <h2>Bonjour 👋</h2>
+      <div id="user-info" style="margin:1rem 0;padding:1rem;background:var(--creme);border-radius:8px;font-size:0.88rem;"></div>
+      <button class="btn-primary" style="width:100%;text-align:center;margin-bottom:0.75rem" onclick="closeModal()">
+        Continuer à générer →
+      </button>
+      <button onclick="handleLogout()" style="width:100%;padding:0.75rem;background:transparent;border:1.5px solid var(--border);border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.88rem;">
+        Se déconnecter
+      </button>
+    </div>
+
   </div>
 </div>
 
@@ -888,17 +926,100 @@ Réponds UNIQUEMENT avec l'email complet, sans explication.`;
     });
   }
 
-  function openModal() {
-    document.getElementById('modal-overlay').classList.add('open');
-  }
+// AUTH FUNCTIONS
+function showView(view) {
+  ['register','login','loggedin'].forEach(v => {
+    document.getElementById('view-' + v).style.display = v === view ? 'block' : 'none';
+  });
+}
 
-  function closeModal() {
-    document.getElementById('modal-overlay').classList.remove('open');
-  }
+async function handleRegister() {
+  const email = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-password').value;
+  const errEl = document.getElementById('reg-error');
+  errEl.style.display = 'none';
+  if (!email || !password) { errEl.textContent = 'Remplis tous les champs'; errEl.style.display = 'block'; return; }
+  try {
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) { errEl.textContent = data.error; errEl.style.display = 'block'; return; }
+    localStorage.setItem('contentai_token', data.token);
+    localStorage.setItem('contentai_user', JSON.stringify(data.user));
+    updateAuthUI(data.user);
+    showView('loggedin');
+  } catch(e) { errEl.textContent = 'Erreur de connexion'; errEl.style.display = 'block'; }
+}
 
-  function closeModalOutside(e) {
-    if (e.target === document.getElementById('modal-overlay')) closeModal();
+async function handleLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const errEl = document.getElementById('login-error');
+  errEl.style.display = 'none';
+  try {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) { errEl.textContent = data.error; errEl.style.display = 'block'; return; }
+    localStorage.setItem('contentai_token', data.token);
+    localStorage.setItem('contentai_user', JSON.stringify(data.user));
+    updateAuthUI(data.user);
+    showView('loggedin');
+  } catch(e) { errEl.textContent = 'Erreur de connexion'; errEl.style.display = 'block'; }
+}
+
+function handleLogout() {
+  localStorage.removeItem('contentai_token');
+  localStorage.removeItem('contentai_user');
+  updateAuthUI(null);
+  closeModal();
+}
+
+function updateAuthUI(user) {
+  const btnNav = document.querySelector('.btn-nav');
+  if (user) {
+    btnNav.textContent = user.email.split('@')[0];
+    const planLabels = { free: '🆓 Gratuit', pro: '⭐ Pro', agence: '🏢 Agence' };
+    document.getElementById('user-info').innerHTML = `
+      <strong>${user.email}</strong><br>
+      Plan : ${planLabels[user.plan] || user.plan}<br>
+      Générations utilisées : ${user.generations_used || 0}
+    `;
+  } else {
+    btnNav.textContent = 'Commencer';
   }
+}
+
+function openModal() {
+  const token = localStorage.getItem('contentai_token');
+  const user = token ? JSON.parse(localStorage.getItem('contentai_user') || '{}') : null;
+  if (user && user.id) {
+    updateAuthUI(user);
+    showView('loggedin');
+  } else {
+    showView('register');
+  }
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+window.addEventListener('load', () => {
+  const user = localStorage.getItem('contentai_user');
+  if (user) updateAuthUI(JSON.parse(user));
+});
 </script>
 </body>
 </html>
