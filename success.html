@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bienvenue sur ContentAI !</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --noir: #0a0a0a;
+      --blanc: #f5f2ec;
+      --accent: #c8a96e;
+      --gris: #6b6560;
+      --border: #e2ddd6;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--blanc);
+      color: var(--noir);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      text-align: center;
+      padding: 3rem 2rem;
+      max-width: 520px;
+    }
+    .check {
+      width: 72px;
+      height: 72px;
+      background: #e8f5e9;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 2rem;
+      font-size: 2rem;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    h1 span { color: var(--accent); }
+    p {
+      color: var(--gris);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+    .card-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .feature:last-child { border-bottom: none; }
+    .feature-icon { color: var(--accent); font-weight: 700; }
+    .btn {
+      display: inline-block;
+      background: var(--noir);
+      color: var(--blanc);
+      padding: 0.9rem 2.5rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #333; }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 900;
+      margin-bottom: 2rem;
+    }
+    .logo span { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">Content<span>AI</span></div>
+    <div class="check">✓</div>
+    <h1>Bienvenue dans<br><span>ContentAI Pro</span> !</h1>
+    <p>Votre abonnement est actif. Vous pouvez maintenant générer jusqu'à 100 contenus par mois.</p>
+    <div class="card">
+      <div class="card-title">✦ Ce qui est inclus</div>
+      <div class="feature"><span class="feature-icon">✓</span> 100 générations / mois</div>
+      <div class="feature"><span class="feature-icon">✓</span> Posts LinkedIn & Emails marketing</div>
+      <div class="feature"><span class="feature-icon">✓</span> Tous les tons disponibles</div>
+      <div class="feature"><span class="feature-icon">✓</span> Historique des créations</div>
+      <div class="feature"><span class="feature-icon">✓</span> Support prioritaire</div>
+    </div>
+    <a href="/" class="btn">Commencer à générer →</a>
+  </div>
+  <script>
+    // Mettre à jour le plan affiché si connecté
+    window.addEventListener('load', () => {
+      const user = localStorage.getItem('contentai_user');
+      if (user) {
+        const u = JSON.parse(user);
+        u.plan = 'pro';
+        localStorage.setItem('contentai_user', JSON.stringify(u));
+      }
+    });
+  </script>
+</body>
+</html>
