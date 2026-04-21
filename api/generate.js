@@ -24,15 +24,34 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  // Vérifier le token
   const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ error: 'Connexion requise', code: 'AUTH_REQUIRED' });
+  const token = authHeader ? authHeader.replace('Bearer ', '') : null;
+  const userId = token ? verifyToken(token) : null;
 
-  const token = authHeader.replace('Bearer ', '');
-  const userId = verifyToken(token);
-  if (!userId) return res.status(401).json({ error: 'Session expirée', code: 'TOKEN_EXPIRED' });
+  // GUEST — 1 génération sans compte
+  if (!userId) {
+    const guestCount = parseInt(req.headers['x-guest-count'] || '0');
+    if (guestCount >= 1) {
+      return res.status(403).json({
+        error: 'Créez un compte gratuit pour continuer',
+        code: 'GUEST_LIMIT_REACHED'
+      });
+    }
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify(req.body)
+    });
+    const data = await response.json();
+    return res.status(response.status).json(data);
+  }
 
-  // Récupérer l'utilisateur
+  // UTILISATEUR CONNECTÉ
   const userRes = await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${userId}&select=*`, {
     headers: {
       'apikey': SUPABASE_SERVICE_KEY,
